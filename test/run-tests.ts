@@ -27,6 +27,66 @@ const TEST_SUITES = [
     description: 'Tests order syntax from the NJudge manual'
   },
   {
+    name: 'Jest: Game State',
+    file: 'game-state.jest.ts',
+    description: 'Jest tests for game state initialization and retrieval',
+    jest: true
+  },
+  {
+    name: 'Jest: Game Management',
+    file: 'game-management.jest.ts',
+    description: 'Jest tests for game management functionality',
+    jest: true
+  },
+  {
+    name: 'Jest: NJudge Commands',
+    file: 'njudge-commands.jest.ts',
+    description: 'Jest tests for NJudge command syntax',
+    jest: true
+  },
+  {
+    name: 'Jest: Game Config Commands',
+    file: 'game-config-commands.jest.ts',
+    description: 'Jest tests for game configuration commands',
+    jest: true
+  },
+  {
+    name: 'Jest: Player Communications',
+    file: 'player-communications.jest.ts',
+    description: 'Jest tests for player communication functionality',
+    jest: true
+  },
+  {
+    name: 'Jest: Game Phases',
+    file: 'game-phases.jest.ts',
+    description: 'Jest tests for game phase transitions and order adjudication',
+    jest: true
+  },
+  {
+    name: 'Jest: Order Tests',
+    file: 'order-tests.jest.ts',
+    description: 'Jest tests for order validation and processing',
+    jest: true
+  },
+  {
+    name: 'Jest: Order Resolution',
+    file: 'order-resolution.jest.ts',
+    description: 'Jest tests for complex order resolution scenarios',
+    jest: true
+  },
+  {
+    name: 'Jest: Player Interactions',
+    file: 'player-interactions.jest.ts',
+    description: 'Jest tests for player interaction flows',
+    jest: true
+  },
+  {
+    name: 'Jest: Game Admin',
+    file: 'game-admin.jest.ts',
+    description: 'Jest tests for game administration',
+    jest: true
+  },
+  {
     name: 'Full Test Suite',
     file: 'test-suite.ts',
     description: 'Comprehensive test of all Node.js binding functionality'
@@ -96,7 +156,13 @@ function runTestSuite(suiteIndex: number): boolean {
   console.log(`==================================================================================\n`);
   
   try {
-    execSync(`ts-node ${testFile}`, { stdio: 'inherit' });
+    if (suite.jest) {
+      // Run with Jest
+      execSync(`npx jest ${testFile} --colors`, { stdio: 'inherit' });
+    } else {
+      // Run with ts-node
+      execSync(`ts-node ${testFile}`, { stdio: 'inherit' });
+    }
     return true;
   } catch (error) {
     console.error(`\nTest suite failed: ${suite.name}`);

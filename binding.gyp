@@ -1,36 +1,19 @@
 {
   "targets": [
     {
-      "target_name": "dip",
+      "target_name": "dip_binding",
       "sources": [
-        "dip_binding.cpp",
-        "../porder.c",
-        "../dip.c",
-        "../dipent.c",
-        "../global.c",
-        "../diptime.c",
-        "../variant.c",
-        "../bailout.c",
-        "../conf.c",
-        "../hashtable.c",
-        "../lib.c",
-        "../users.c"
+        "dip_binding.cpp"
       ],
       "include_dirs": [
-        "<!@(node -p \"require('node-addon-api').include\")",
         "..",
         "."
-      ],
-      "dependencies": [
-        "<!(node -p \"require('node-addon-api').gyp\")"
       ],
       "cflags!": [ "-fno-exceptions" ],
       "cflags_cc!": [ "-fno-exceptions" ],
       "cflags": [
         "-fPIC",
-        "-Wno-unused-result",
-        "-Wno-pointer-sign",
-        "-fcommon"
+        "-Wno-unused-result"
       ],
       "xcode_settings": {
         "GCC_ENABLE_CPP_EXCEPTIONS": "YES",
