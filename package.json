@@ -25,6 +25,12 @@
         "test:communications": "jest test/player-communications.jest.ts",
         "test:phases": "jest test/game-phases.jest.ts",
         "test:config": "jest test/game-config-commands.jest.ts",
+        "test:deadlines": "jest test/deadline-management.jest.ts",
+        "test:conclusion": "jest test/game-conclusion.jest.ts",
+        "test:master": "jest test/master-controls.jest.ts",
+        "test:registration": "jest test/player-registration.jest.ts",
+        "test:press": "jest test/extended-press.jest.ts",
+        "test:conditional": "jest test/conditional-orders.jest.ts",
         "prepare": "npm run build"
     },
     "jest": {

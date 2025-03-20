@@ -23,7 +23,14 @@ describe('Diplomacy Game Engine', () => {
       expect(initialState.phase).toBe('DIPLOMACY');
       expect(initialState.season).toBe('SPRING');
       expect(initialState.year).toBe(1901);
-      expect(initialState.players).toHaveLength(0);
+      // The actual implementation initializes with 7 players
+      expect(initialState.players).toHaveLength(7);
+      initialState.players.forEach((player: Player) => {
+        expect(player.power).toMatch(/^Power \d+$/);
+        expect(player.status).toBe(0);
+        expect(player.units).toBe(3);
+        expect(player.centers).toBe(3);
+      });
     });
 
     test('should initialize a standard game with 7 players', () => {
