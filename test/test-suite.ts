@@ -35,6 +35,10 @@ function logInfo(message: string): void {
   console.log(`ℹ️ ${message}`);
 }
 
+function logWarning(message: string): void {
+  console.log(`⚠️ ${message}`);
+}
+
 // Main test function
 async function runTests() {
   try {
@@ -131,7 +135,7 @@ async function runTests() {
     }
     */
     
-    // Test 4: Player Registration
+    // Test 4: Player Registration - SIMULATION ONLY
     logSection('Test 4: Player Registration - SIMULATION ONLY');
     logInfo('Note: This is a simplified test that simulates the behavior rather than calling actual registration');
     
@@ -212,15 +216,23 @@ async function runTests() {
       // Test processing text input
       const textInput = 'PRESS FROM ENGLAND TO FRANCE\nLet us work together against Germany.';
       const textProcessed = processTextInput(textInput, 'england@example.com');
+      
       if (textProcessed) {
-        logSuccess(`Successfully processed text input`);
+        // Check if function exists but real implementation is pending
+        logWarning(`Text input processing interface exists, but may not be fully implemented yet`);
       } else {
         logFailure(`Failed to process text input`);
       }
       
       // Test getting text output
       const output = getTextOutput(0);
-      logInfo(`Text output for player 0: ${output}`);
+      if (output === undefined || output === null) {
+        logFailure(`Text output returned undefined/null`);
+      } else if (output === '') {
+        logWarning(`Text output function exists but returned empty string - further implementation likely needed`);
+      } else {
+        logSuccess(`Got text output: "${output.substring(0, 50)}${output.length > 50 ? '...' : ''}"`);
+      }
       
       // Test simulating inbound email
       const emailSubject = 'PRESS: ENGLAND TO FRANCE';
@@ -229,20 +241,33 @@ async function runTests() {
       
       const emailSimulated = simulateInboundEmail(emailSubject, emailBody, fromEmail);
       if (emailSimulated) {
-        logSuccess(`Successfully simulated inbound email`);
+        logWarning(`Email simulation interface exists, but may not be fully implemented yet`);
+        logInfo(`To verify functionality, check if an email was actually processed`);
       } else {
         logFailure(`Failed to simulate inbound email`);
       }
       
       // Test getting outbound emails
       const emails = getOutboundEmails();
-      logInfo(`Outbound email count: ${emails.length}`);
-      if (emails.length > 0) {
-        logInfo(`First email: To: ${emails[0].to}, Subject: ${emails[0].subject}`);
-        logSuccess(`Successfully retrieved outbound emails`);
+      
+      if (!Array.isArray(emails)) {
+        logFailure(`getOutboundEmails didn't return an array: ${typeof emails}`);
+      } else if (emails.length === 0) {
+        logWarning(`Outbound emails function exists but returned empty array - normal if no emails were generated`);
+        logInfo(`To fully test email functionality, the binding may need additional implementation`);
       } else {
-        logInfo('No outbound emails available');
+        logSuccess(`Got ${emails.length} outbound emails`);
+        logInfo(`First email: To: ${emails[0].to}, Subject: ${emails[0].subject}`);
       }
+      
+      // Implementation status summary
+      logSection('Implementation Status');
+      logInfo(`Text/Email functionality appears to be partially implemented.`);
+      logInfo(`  - processTextInput: ${textProcessed ? 'Interface exists' : 'Not working'}`);
+      logInfo(`  - getTextOutput: ${output !== undefined ? 'Interface exists' : 'Not working'}`);
+      logInfo(`  - simulateInboundEmail: ${emailSimulated ? 'Interface exists' : 'Not working'}`);
+      logInfo(`  - getOutboundEmails: ${Array.isArray(emails) ? 'Interface exists' : 'Not working'}`);
+      
     } catch (error) {
       logFailure(`Text I/O test failed: ${error}`);
     }
