@@ -9,6 +9,10 @@
         "build": "node-gyp rebuild && tsc",
         "clean": "node-gyp clean && rm -rf lib",
         "test": "ts-node test/example.ts",
+        "test-all": "ts-node test/run-tests.ts",
+        "test-orders": "ts-node test/order-tests.ts",
+        "test-game": "ts-node test/game-management-tests.ts",
+        "test-njudge": "ts-node test/njudge-commands.ts",
         "prepare": "npm run build"
     },
     "author": "",

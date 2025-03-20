@@ -92,6 +92,43 @@ console.log(output);
 - `simulateInboundEmail(subject: string, body: string, fromEmail: string)`: Simulate email input
 - `getOutboundEmails()`: Get all pending outbound emails
 
+## Command Syntax
+
+The binding supports the standard Diplomacy order syntax as used by njudge:
+
+### Movement Orders
+- Hold: `F LON H`, `A PAR HOLD`
+- Move: `F LON-NTH`, `A PAR-BUR`
+- Support Hold: `F LON S A WAL`, `F LON SUP A WAL`
+- Support Move: `F LON S A WAL-YOR`, `F LON SUP A WAL-YOR`
+- Convoy: `F NTH C A LON-NWY`, `F NTH CON A LON-NWY`
+
+### Retreat Orders
+- Retreat: `A PAR R BUR`, `A PAR RET BUR`
+- Disband: `A PAR D`, `A PAR DISBAND`
+
+### Build Orders
+- Build: `B F LON`, `BUILD A PAR`
+- Remove: `R F LON`, `REMOVE A PAR`
+- Waive: `W`, `WAIVE`
+
+## Testing
+
+The project includes a comprehensive test suite to validate the functionality of the Node.js bindings. Run the tests with:
+
+```bash
+# Run all tests
+npm run test-all
+
+# Run individual test suites
+npm test                # Basic functionality
+npm run test-orders     # Order syntax
+npm run test-game       # Game management
+npm run test-njudge     # NJudge commands
+```
+
+See the `test/README.md` file for more information about the test suite and how to extend it with your own tests.
+
 ## Development
 
 - `npm run build`: Rebuild the native addon and TypeScript code
