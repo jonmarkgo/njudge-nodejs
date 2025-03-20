@@ -31,8 +31,35 @@ interface PlayerRegistration {
 
 interface OutboundEmail {
   to: string;
+  from: string;
   subject: string;
   body: string;
+}
+
+interface PlayerPreferences {
+  notifications: boolean;
+  deadlineReminders: boolean;
+  orderConfirmation: boolean;
+}
+
+interface GameDetails {
+  id: string;
+  name: string;
+  variant: string;
+  phase: string;
+  press: string;
+  deadline: string;
+  graceTime: string;
+  victoryConditions: string;
+  startTime: string;
+  players: number;
+  year: number;
+  started: boolean;
+  playerList: {
+    power: string;
+    status: string;
+    player: string;
+  }[];
 }
 
 type GameVariant = 'standard' | 'machiavelli';
@@ -52,7 +79,7 @@ interface DiplomacyGame {
     }[];
   };
   validateOrder(order: string, playerId: number): boolean;
-  processOrders(orders: string, playerId: number): number;
+  processOrders(gameId: string, playerId: number, orders: string[] | string): number;
   setGameVariant(variant: string, gameId: string): boolean;
   setPressRules(pressType: string, gameId: string): boolean;
   setDeadlines(deadline: number, grace: number, gameId: string): boolean;
@@ -92,112 +119,166 @@ interface DiplomacyGame {
     phase: string;
     players: number;
   }[];
-  getGameDetails(gameId: string): {
-    id: string;
-    name: string;
-    variant: string;
-    phase: string;
-    press: string;
-    deadline: string;
-    graceTime: string;
-    victoryConditions: string;
-    startTime: string;
-    players: {
-      power: string;
-      status: string;
-      player: string;
-    }[];
-  };
+  getGameDetails(gameId: string): GameDetails;
   modifyGameSettings(gameId: string, settings: Record<string, any>): {
     success: boolean;
   };
   setMaster(gameId: string, masterId: string): {
     success: boolean;
   };
-  backupGame(gameId: string, filename: string): {
+  backupGame(gameId: string): {
     success: boolean;
-    file: string;
+    backupId: string;
   };
-  restoreGame(filename: string): {
+  restoreGame(backupId: string): {
     success: boolean;
     gameId: string;
   };
+  
+  // Player account management functions
+  linkPlayerEmail(newEmail: string, existingEmail: string): boolean;
+  setPlayerPreferences(playerId: number, preferences: PlayerPreferences): boolean;
+  
+  // Email and text processing functions
+  processTextInput(text: string, fromEmail: string): boolean;
+  getTextOutput(playerId: number): string;
+  simulateInboundEmail(subject: string, body: string, fromEmail: string): boolean;
+  getOutboundEmails(): OutboundEmail[];
+  
+  // Advanced diplomacy features
+  processConditionalOrders(playerId: number, orders: string): boolean;
+  extendedPressRules(gameId: string, ruleType: string, value: boolean): boolean;
 }
 
-// Load the native addon
-let addon: DiplomacyAddon;
+// Attempt to load the native addon
+let binding: DiplomacyGame;
 try {
-  addon = require(join(__dirname, '../build/Release/dip.node'));
+  binding = require('../build/Release/dip_binding');
 } catch (e) {
-  // If the original module isn't available, we'll use just the new binding
-  addon = {} as DiplomacyAddon;
+  console.error('Failed to load diplomacy native binding:', e);
+  // Provide a dummy implementation to prevent crashes during development
+  binding = {
+    initGame: () => false,
+    getGameState: () => ({ phase: '', season: '', year: 0, players: [] }),
+    validateOrder: () => false,
+    processOrders: () => 0,
+    setGameVariant: () => false,
+    setPressRules: () => false,
+    setDeadlines: () => false,
+    setVictoryConditions: () => false,
+    setGameAccess: () => false,
+    registerPlayer: () => ({ success: false, playerId: 0 }),
+    getPlayerStatus: () => ({ power: '', status: '', units: 0, centers: 0 }),
+    sendPress: () => ({ success: false }),
+    voteForDraw: () => ({ success: false }),
+    submitOrders: () => ({ success: false, ordersAccepted: false }),
+    createGame: () => ({ success: false, gameId: '' }),
+    listGames: () => [],
+    getGameDetails: () => ({
+      id: '',
+      name: '',
+      variant: '',
+      phase: '',
+      press: '',
+      deadline: '',
+      graceTime: '',
+      victoryConditions: '',
+      startTime: '',
+      players: 0,
+      year: 1901,
+      started: false,
+      playerList: []
+    } as GameDetails),
+    modifyGameSettings: () => ({ success: false }),
+    setMaster: () => ({ success: false }),
+    backupGame: () => ({ success: false, backupId: '' }),
+    restoreGame: () => ({ success: false, gameId: '' }),
+    linkPlayerEmail: () => false,
+    setPlayerPreferences: () => false,
+    processTextInput: () => false,
+    getTextOutput: () => '',
+    simulateInboundEmail: () => false,
+    getOutboundEmails: () => [],
+    processConditionalOrders: () => false,
+    extendedPressRules: () => false
+  };
 }
 
-// Import the new binding module
-const binding = require('../build/Release/dip_binding.node');
+// Export all functions from the binding
+export const initGame = binding.initGame;
+export const getGameState = binding.getGameState;
+export const validateOrder = binding.validateOrder;
+export const processOrders = binding.processOrders;
+export const setGameVariant = binding.setGameVariant;
+export const setPressRules = binding.setPressRules;
+export const setDeadlines = binding.setDeadlines;
+export const setVictoryConditions = binding.setVictoryConditions;
+export const setGameAccess = binding.setGameAccess;
 
-// Merge the exports from both native modules
-export const {
-  // Export everything from our new binding
-  initGame,
-  processOrders,
-  validateOrder,
-  getGameState,
-  registerPlayer,
-  linkPlayerEmail,
-  setGameVariant,
-  setPressRules,
-  setDeadlines,
-  setVictoryConditions,
-  setGameAccess,
-  processTextInput,
-  getTextOutput,
-  simulateInboundEmail,
-  getOutboundEmails,
-  // New player interaction functions
-  getPlayerStatus,
-  sendPress,
-  voteForDraw,
-  submitOrders,
-  // New game administration functions
-  createGame,
-  listGames,
-  getGameDetails,
-  modifyGameSettings,
-  setMaster,
-  backupGame,
-  restoreGame
-} = { ...addon, ...binding };
+export const registerPlayer = binding.registerPlayer;
+export const getPlayerStatus = binding.getPlayerStatus;
+export const sendPress = binding.sendPress;
+export const voteForDraw = binding.voteForDraw;
+export const submitOrders = binding.submitOrders;
 
-// Re-export types and interfaces
-export type {
-  GameVariant,
-  PressType
-};
+export const createGame = binding.createGame;
+export const listGames = binding.listGames;
+export const getGameDetails = binding.getGameDetails;
+export const modifyGameSettings = binding.modifyGameSettings;
+export const setMaster = binding.setMaster;
+export const backupGame = binding.backupGame;
+export const restoreGame = binding.restoreGame;
 
+// Export the new functions
+export const linkPlayerEmail = binding.linkPlayerEmail;
+export const setPlayerPreferences = binding.setPlayerPreferences;
+export const processTextInput = binding.processTextInput;
+export const getTextOutput = binding.getTextOutput;
+export const simulateInboundEmail = binding.simulateInboundEmail;
+export const getOutboundEmails = binding.getOutboundEmails;
+export const processConditionalOrders = binding.processConditionalOrders;
+export const extendedPressRules = binding.extendedPressRules;
+
+// Export types
+export type { Player, GameState, OutboundEmail, PlayerPreferences, GameDetails };
+
+// Export the DiplomacyAddon interface for TypeScript users
 export interface DiplomacyAddon {
   initGame(variant: GameVariant, numPlayers: number): void;
-  processOrders(orders: string, playerId: number): number;
+  processOrders(gameId: string, playerId: number, orders: string[] | string): number;
   validateOrder(order: string, playerId: number): boolean;
   getGameState(): GameState;
-  registerPlayer(player: PlayerRegistration): boolean;
+  registerPlayer(name: string, email: string, power: string, gameId: string): {
+    success: boolean;
+    playerId: number;
+  };
+  getPlayerStatus(playerId: number, gameId: string): {
+    power: string;
+    status: string;
+    units: number;
+    centers: number;
+  };
+  sendPress(sender: number, recipient: number | string, message: string, gameId: string): {
+    success: boolean;
+  };
+  voteForDraw(playerId: number, vote: boolean, gameId: string): {
+    success: boolean;
+  };
+  submitOrders(playerId: number, orders: string, gameId: string): {
+    success: boolean;
+    ordersAccepted: boolean;
+  };
   linkPlayerEmail(newEmail: string, existingEmail: string): boolean;
+  setPlayerPreferences(playerId: number, preferences: PlayerPreferences): boolean;
   setGameVariant(variant: GameVariant, gameId: string): boolean;
   setPressRules(pressType: PressType, gameId: string): boolean;
   setDeadlines(deadline: number, grace: number, gameId: string): boolean;
   setVictoryConditions(dias: boolean, gameId: string): boolean;
   setGameAccess(dedication: number, ontime: number, resrat: number, gameId: string): boolean;
-  // Text I/O functions
   processTextInput(text: string, fromEmail: string): boolean;
   getTextOutput(playerId: number): string;
   simulateInboundEmail(subject: string, body: string, fromEmail: string): boolean;
   getOutboundEmails(): OutboundEmail[];
+  processConditionalOrders(playerId: number, orders: string): boolean;
+  extendedPressRules(gameId: string, ruleType: string, value: boolean): boolean;
 }
-
-export type {
-  Player,
-  GameState,
-  OrderResult,
-  PlayerRegistration,
-  OutboundEmail
-};

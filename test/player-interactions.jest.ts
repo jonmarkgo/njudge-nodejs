@@ -142,7 +142,7 @@ describe('Player Interactions', () => {
       
       // Process the orders - this would typically be done by the game engine,
       // but we'll simulate it here
-      const processResult = processOrders(gameId);
+      const processResult = processOrders(gameId, 0, ['A LON-NTH', 'F EDI-NWG']);
       expect(processResult).toBe(1); // Updated to expect 1 instead of true
       
       // Verify game state has advanced
@@ -159,7 +159,7 @@ describe('Player Interactions', () => {
       expect(result.ordersAccepted).toBe(true);
       
       // Process retreats
-      const processResult = processOrders(gameId);
+      const processResult = processOrders(gameId, 0, ['F NTH-LON']);
       expect(processResult).toBe(1); // Updated to expect 1 instead of true
     });
     
@@ -177,7 +177,7 @@ describe('Player Interactions', () => {
       expect(franceResult.ordersAccepted).toBe(true);
       
       // Process builds
-      const processResult = processOrders(gameId);
+      const processResult = processOrders(gameId, 0, ['A LON', 'R F BRE']);
       expect(processResult).toBe(1); // Updated to expect 1 instead of true
     });
   });
@@ -208,7 +208,7 @@ describe('Player Interactions', () => {
       // For brevity, we'll just check that the game state can advance
       
       // Simulate advancing to next year by processing more turns
-      processOrders(gameId); // Process Winter 1901 (if not already)
+      processOrders(gameId, 0, []); // Process Winter 1901 (if not already)
       
       // Check game state
       const state = getGameState();

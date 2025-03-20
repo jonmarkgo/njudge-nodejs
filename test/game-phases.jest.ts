@@ -33,13 +33,13 @@ describe('Game Phase and Order Processing', () => {
       const russiaOrders = 'F SEV-BLA\nF STP/SC-BOT\nA WAR-GAL\nA MOS-UKR';
       
       // Process orders for all players
-      processOrders(englandOrders, 0);
-      processOrders(franceOrders, 1);
-      processOrders(germanyOrders, 2);
-      processOrders(italyOrders, 3);
-      processOrders(austriaOrders, 4);
-      processOrders(turkeyOrders, 5);
-      processOrders(russiaOrders, 6);
+      processOrders('test-game', 0, englandOrders);
+      processOrders('test-game', 1, franceOrders);
+      processOrders('test-game', 2, germanyOrders);
+      processOrders('test-game', 3, italyOrders);
+      processOrders('test-game', 4, austriaOrders);
+      processOrders('test-game', 5, turkeyOrders);
+      processOrders('test-game', 6, russiaOrders);
       
       // Force the order adjudication
       // In a real implementation, this might be done by the engine
@@ -58,13 +58,13 @@ describe('Game Phase and Order Processing', () => {
       
       // Submit retreat orders for all powers
       // Here we're just submitting empty orders which means no units retreat
-      processOrders('', 0); // England
-      processOrders('', 1); // France
-      processOrders('', 2); // Germany
-      processOrders('', 3); // Italy
-      processOrders('', 4); // Austria
-      processOrders('', 5); // Turkey
-      processOrders('', 6); // Russia
+      processOrders('test-game', 0, '');
+      processOrders('test-game', 1, '');
+      processOrders('test-game', 2, '');
+      processOrders('test-game', 3, '');
+      processOrders('test-game', 4, '');
+      processOrders('test-game', 5, '');
+      processOrders('test-game', 6, '');
       
       // Check if game transitioned to Movement phase (Fall)
       const gameState = getGameState();
@@ -87,13 +87,13 @@ describe('Game Phase and Order Processing', () => {
       const russiaOrders = 'F BLA-RUM\nF BOT-SWE\nA GAL-VIE\nA UKR-RUM';
       
       // Process orders for all players
-      processOrders(englandOrders, 0);
-      processOrders(franceOrders, 1);
-      processOrders(germanyOrders, 2);
-      processOrders(italyOrders, 3);
-      processOrders(austriaOrders, 4);
-      processOrders(turkeyOrders, 5);
-      processOrders(russiaOrders, 6);
+      processOrders('test-game', 0, englandOrders);
+      processOrders('test-game', 1, franceOrders);
+      processOrders('test-game', 2, germanyOrders);
+      processOrders('test-game', 3, italyOrders);
+      processOrders('test-game', 4, austriaOrders);
+      processOrders('test-game', 5, turkeyOrders);
+      processOrders('test-game', 6, russiaOrders);
       
       // Check if game transitioned to Retreat phase
       const gameState = getGameState();
@@ -107,13 +107,13 @@ describe('Game Phase and Order Processing', () => {
       // (This would be setup or dependent on previous tests)
       
       // Submit retreat orders for all powers
-      processOrders('', 0); // England
-      processOrders('', 1); // France
-      processOrders('', 2); // Germany
-      processOrders('', 3); // Italy
-      processOrders('', 4); // Austria
-      processOrders('', 5); // Turkey
-      processOrders('', 6); // Russia
+      processOrders('test-game', 0, '');
+      processOrders('test-game', 1, '');
+      processOrders('test-game', 2, '');
+      processOrders('test-game', 3, '');
+      processOrders('test-game', 4, '');
+      processOrders('test-game', 5, '');
+      processOrders('test-game', 6, '');
       
       // Check if game transitioned to Build phase
       const gameState = getGameState();
@@ -136,13 +136,13 @@ describe('Game Phase and Order Processing', () => {
       const russiaOrders = 'B F SEV';
       
       // Process orders for all players
-      processOrders(englandOrders, 0);
-      processOrders(franceOrders, 1);
-      processOrders(germanyOrders, 2);
-      processOrders(italyOrders, 3);
-      processOrders(austriaOrders, 4);
-      processOrders(turkeyOrders, 5);
-      processOrders(russiaOrders, 6);
+      processOrders('test-game', 0, englandOrders);
+      processOrders('test-game', 1, franceOrders);
+      processOrders('test-game', 2, germanyOrders);
+      processOrders('test-game', 3, italyOrders);
+      processOrders('test-game', 4, austriaOrders);
+      processOrders('test-game', 5, turkeyOrders);
+      processOrders('test-game', 6, russiaOrders);
       
       // Check if game transitioned to Movement phase (Spring of next year)
       const gameState = getGameState();
@@ -156,7 +156,7 @@ describe('Game Phase and Order Processing', () => {
     test.skip('should correctly resolve basic movement orders', () => {
       // Test simple movement without conflicts
       const orders = 'F LON-NTH\nA LVP-YOR';
-      const result = processOrders(orders, 0);
+      const result = processOrders('test-game', 0, orders);
       
       expect(result).toBeGreaterThan(0);
       
@@ -173,8 +173,8 @@ describe('Game Phase and Order Processing', () => {
       const franceOrders = 'A PAR-BEL';
       const germanyOrders = 'A MUN-BEL';
       
-      processOrders(franceOrders, 1);
-      processOrders(germanyOrders, 2);
+      processOrders('test-game', 1, franceOrders);
+      processOrders('test-game', 2, germanyOrders);
       
       // Force adjudication (would happen automatically in the engine)
       
@@ -189,8 +189,8 @@ describe('Game Phase and Order Processing', () => {
       const franceOrders = 'A PAR S A MUN-BEL';
       const germanyOrders = 'A MUN-BEL';
       
-      processOrders(franceOrders, 1);
-      processOrders(germanyOrders, 2);
+      processOrders('test-game', 1, franceOrders);
+      processOrders('test-game', 2, germanyOrders);
       
       // Force adjudication
       
@@ -204,7 +204,7 @@ describe('Game Phase and Order Processing', () => {
       // England convoys army from London to Norway
       const englandOrders = 'A LON-NWY VIA\nF NTH C A LON-NWY';
       
-      processOrders(englandOrders, 0);
+      processOrders('test-game', 0, englandOrders);
       
       // Force adjudication
       
@@ -220,8 +220,8 @@ describe('Game Phase and Order Processing', () => {
       const englandOrders = 'A LON-NWY VIA\nF NTH C A LON-NWY';
       const russiaOrders = 'F NWG-NTH';
       
-      processOrders(englandOrders, 0);
-      processOrders(russiaOrders, 6);
+      processOrders('test-game', 0, englandOrders);
+      processOrders('test-game', 6, russiaOrders);
       
       // Force adjudication
       
@@ -238,7 +238,7 @@ describe('Game Phase and Order Processing', () => {
       // England builds a fleet in London
       const englandOrders = 'B F LON';
       
-      processOrders(englandOrders, 0);
+      processOrders('test-game', 0, englandOrders);
       
       // Check results
       const gameState = getGameState();
@@ -253,7 +253,7 @@ describe('Game Phase and Order Processing', () => {
       // Retreat the dislodged unit
       const orders = 'A PAR R BUR';
       
-      processOrders(orders, 1);
+      processOrders('test-game', 1, orders);
       
       // Check results
       const gameState = getGameState();
@@ -268,7 +268,7 @@ describe('Game Phase and Order Processing', () => {
       // Disband the dislodged unit
       const orders = 'A PAR D';
       
-      processOrders(orders, 1);
+      processOrders('test-game', 1, orders);
       
       // Check results
       const gameState = getGameState();
@@ -283,7 +283,7 @@ describe('Game Phase and Order Processing', () => {
       // Waive the build
       const orders = 'WAIVE';
       
-      processOrders(orders, 0);
+      processOrders('test-game', 0, orders);
       
       // Check results
       const gameState = getGameState();

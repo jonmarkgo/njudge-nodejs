@@ -39,6 +39,20 @@ void SetMaster(const v8::FunctionCallbackInfo<v8::Value>& args);
 void BackupGame(const v8::FunctionCallbackInfo<v8::Value>& args);
 void RestoreGame(const v8::FunctionCallbackInfo<v8::Value>& args);
 
+// Player account management functions
+void LinkPlayerEmail(const v8::FunctionCallbackInfo<v8::Value>& args);
+void SetPlayerPreferences(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+// Email and text processing functions
+void ProcessTextInput(const v8::FunctionCallbackInfo<v8::Value>& args);
+void GetTextOutput(const v8::FunctionCallbackInfo<v8::Value>& args);
+void SimulateInboundEmail(const v8::FunctionCallbackInfo<v8::Value>& args);
+void GetOutboundEmails(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+// Advanced diplomacy features
+void ProcessConditionalOrders(const v8::FunctionCallbackInfo<v8::Value>& args);
+void ExtendedPressRules(const v8::FunctionCallbackInfo<v8::Value>& args);
+
 // Module initialization
 void Init(v8::Local<v8::Object> exports);
 

@@ -4,7 +4,8 @@ import {
   processTextInput,
   getOutboundEmails,
   registerPlayer,
-  linkPlayerEmail
+  linkPlayerEmail,
+  setPlayerPreferences
 } from '../lib';
 
 describe('Player Registration and Preferences', () => {
@@ -20,15 +21,20 @@ describe('Player Registration and Preferences', () => {
       expect(result.playerId).toBeDefined();
     });
 
-    test.skip('should link player email through API', () => {
+    test('should link player email through API', () => {
       const result = linkPlayerEmail('new-email@example.com', 'player@example.com');
       expect(result).toBe(true);
     });
   });
 
   describe('Registration Commands', () => {
-    test.skip('should process REGISTER command', () => {
-      // Skipped until implemented
+    test('should process REGISTER command', () => {
+      const result = processTextInput('REGISTER John Doe', 'new@example.com');
+      expect(result).toBe(true);
+      
+      const emails = getOutboundEmails();
+      expect(emails.length).toBeGreaterThan(0);
+      expect(emails[0].subject).toContain('REGISTER');
     });
 
     test.skip('should process UNREGISTER command', () => {
@@ -61,8 +67,18 @@ describe('Player Registration and Preferences', () => {
       // Skipped until implemented
     });
 
-    test.skip('should set player notification preferences', () => {
-      // Skipped until setPlayerPreferences is implemented
+    test('should set player notification preferences', () => {
+      // First register a player to get a valid ID
+      const registration = registerPlayer('PrefsTest', 'prefs@example.com', 'France', 'test-game');
+      expect(registration.success).toBe(true);
+      
+      // Set preferences for the registered player
+      const result = setPlayerPreferences(registration.playerId, { 
+        notifications: true, 
+        deadlineReminders: true, 
+        orderConfirmation: true 
+      });
+      expect(result).toBe(true);
     });
   });
 

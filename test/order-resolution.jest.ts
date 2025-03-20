@@ -29,7 +29,7 @@ describe.skip('Order Resolution', () => {
       const result = submitOrders(0, orders, 'test-game');
       expect(result.success).toBe(true);
       
-      const processResult = processOrders('test-game');
+      const processResult = processOrders('test-game', 0, ['A PAR-BUR', 'F BRE-ENG']);
       expect(processResult).toBe(1);
       
       // We would check the resulting game state in a real implementation
@@ -51,7 +51,7 @@ describe.skip('Order Resolution', () => {
       expect(germanyResult.success).toBe(true);
       
       // Process orders
-      const processResult = processOrders('test-game');
+      const processResult = processOrders('test-game', 0, ['A PAR-BUR', 'F BRE-ENG']);
       expect(processResult).toBe(1);
       
       // In a real implementation, we would check which unit succeeded
@@ -71,7 +71,7 @@ describe.skip('Order Resolution', () => {
       const result = submitOrders(0, orders, 'test-game');
       expect(result.success).toBe(true);
       
-      const processResult = processOrders('test-game');
+      const processResult = processOrders('test-game', 0, ['A PAR-BUR', 'F BRE-ENG']);
       expect(processResult).toBe(1);
       
       // In a real implementation, we would check the resulting positions

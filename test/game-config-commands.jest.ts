@@ -161,9 +161,9 @@ describe('Game Configuration Commands', () => {
 
     test.skip('should backup and restore a game', () => {
       // First backup the game
-      const backupResult = backupGame('testgame', 'backup-testgame.json');
+      const backupResult = backupGame('testgame');
       expect(backupResult.success).toBe(true);
-      expect(backupResult.file).toBeDefined();
+      expect(backupResult.backupId).toBeDefined();
       
       // Then restore from the backup
       const restoreResult = restoreGame('backup-testgame.json');

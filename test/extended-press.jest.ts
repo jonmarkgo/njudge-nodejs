@@ -15,8 +15,8 @@ interface Email {
   body: string;
 }
 
-// Skip this test suite until extended press functionality is fully implemented
-describe.skip('Extended Press and Communication', () => {
+// The test suite is now enabled since we've implemented the necessary functions
+describe('Extended Press and Communication', () => {
   const gameId = 'test-game';
   const playerIds: Record<string, number> = {};
   
